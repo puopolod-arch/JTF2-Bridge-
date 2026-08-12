@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JTF2 Complete Program</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0c0e12;color:#e0dbd0;font-family:'Georgia',serif;min-height:100vh}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+.hdr{background:#111318;border-bottom:1px solid #252a35;padding:16px 18px}
+.hdr-inner{max-width:860px;margin:0 auto}
+.hdr h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:1.5px;text-transform:uppercase}
+.hdr p{font-size:11px;color:#6a7280;font-family:sans-serif;margin-top:3px;letter-spacing:.5px}
+.main-tabs{background:#111318;border-bottom:1px solid #252a35;overflow-x:auto;white-space:nowrap}
+.main-tabs-inner{max-width:860px;margin:0 auto;display:flex}
+.mtab{padding:13px 14px;font-size:10px;font-weight:700;letter-spacing:1.5px;font-family:sans-serif;color:#5a6270;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.mtab.active{color:#c8963e;border-bottom-color:#c8963e}
+.content{max-width:860px;margin:0 auto;padding:16px}
+.card{background:#161920;border:1px solid #252a35;border-radius:8px;padding:14px;margin-bottom:12px}
+.card-accent{background:#1a1608;border:1px solid #c8963e;border-radius:8px;padding:14px;margin-bottom:12px}
+.card-green{background:#0e1a12;border:1px solid #3a7a50;border-radius:8px;padding:14px;margin-bottom:12px}
+.card-red{background:#1a0e0e;border:1px solid #7a3a3a;border-radius:8px;padding:14px;margin-bottom:12px}
+.card-blue{background:#0e1220;border:1px solid #2a4a7a;border-radius:8px;padding:14px;margin-bottom:12px}
+.label{font-size:9px;font-weight:700;letter-spacing:2px;font-family:sans-serif;text-transform:uppercase}
+.label-amber{color:#c8963e}.label-green{color:#4caf7d}.label-red{color:#cf7a6a}.label-muted{color:#5a6270}.label-blue{color:#82aacc}
+h2{font-size:14px;color:#fff;font-weight:700;margin-bottom:10px}
+h3{font-size:13px;color:#fff;font-weight:700;margin-bottom:8px}
+p.body{font-size:13px;color:#c0bab0;line-height:1.7;font-family:sans-serif}
+p.small{font-size:12px;color:#9a9490;line-height:1.6;font-family:sans-serif}
+.week-selector{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.wbtn{padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:1px;font-family:sans-serif;border:1px solid #252a35;border-radius:4px;color:#5a6270;background:#161920;transition:all .2s}
+.wbtn.active{background:#c8963e;color:#0c0e12;border-color:#c8963e}
+.wbtn.green.active{background:#4caf7d;color:#0c0e12;border-color:#4caf7d}
+.day-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#111318;border:1px solid #252a35;border-radius:6px;margin-bottom:8px}
+.day-label{font-size:11px;font-weight:700;color:#fff;font-family:sans-serif;min-width:38px}
+.day-desc{font-size:11px;color:#7a8090;font-family:sans-serif;flex:1;line-height:1.4}
+.day-check{width:22px;height:22px;border-radius:4px;border:2px solid #3a4050;background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:12px}
+.day-check.done{background:#4caf7d;border-color:#4caf7d;color:#0c0e12;font-weight:700}
+.pu-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.inp-wrap label{font-size:10px;letter-spacing:1.2px;color:#5a6270;font-family:sans-serif;display:block;margin-bottom:4px;text-transform:uppercase}
+.inp{width:100%;background:#111318;border:1px solid #252a35;border-radius:5px;padding:8px 10px;color:#e0dbd0;font-size:14px;font-family:sans-serif;text-align:center}
+.inp:focus{outline:none;border-color:#c8963e}
+.inp.green:focus{border-color:#4caf7d}
+.progress-bar-wrap{background:#111318;border-radius:4px;height:6px;margin-top:4px;overflow:hidden}
+.progress-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,#c8963e,#e8b050);transition:width .5s}
+.progress-bar.green-bar{background:linear-gradient(90deg,#2a7a50,#4caf7d)}
+.day-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.dtab{padding:7px 11px;font-size:10px;font-weight:700;letter-spacing:1px;font-family:sans-serif;border:1px solid #252a35;border-radius:4px;color:#5a6270;background:#161920;white-space:nowrap;transition:all .2s}
+.dtab.active{background:#c8963e;color:#0c0e12;border-color:#c8963e}
+.block{border-radius:6px;padding:12px;margin-bottom:10px}
+.block-warmup{background:#1a2a1a}.block-strength{background:#151e2a}.block-amrap{background:#221618}.block-carry{background:#1e1c0e}.block-cooldown{background:#141424}.block-skill{background:#101828}
+.block-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.block-type{font-size:9px;font-weight:700;letter-spacing:1.8px;font-family:sans-serif;padding:3px 7px;border-radius:3px}
+.bt-warmup{background:rgba(76,175,125,0.2);color:#4caf7d}
+.bt-strength{background:rgba(100,150,200,0.2);color:#82aacc}
+.bt-amrap{background:rgba(207,122,106,0.2);color:#cf7a6a}
+.bt-carry{background:rgba(200,150,62,0.2);color:#c8963e}
+.bt-cooldown{background:rgba(140,120,200,0.2);color:#aa90cc}
+.bt-skill{background:rgba(82,130,200,0.2);color:#82aacc}
+.block ul{padding-left:14px}
+.block li{font-size:12px;color:#c0bab0;font-family:sans-serif;margin-bottom:5px;line-height:1.6}
+.captain-note{padding:11px 12px;background:#181408;border-left:3px solid #c8963e;border-radius:0 6px 6px 0;margin-top:10px}
+.captain-note p{font-size:12px;color:#c0bab0;font-family:sans-serif;line-height:1.6}
+.pavel-note{padding:11px 12px;background:#081828;border-left:3px solid #82aacc;border-radius:0 6px 6px 0;margin-top:10px}
+.pavel-note p{font-size:12px;color:#c0bab0;font-family:sans-serif;line-height:1.6;font-style:italic}
+.bench-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.bench-cell{border-radius:5px;padding:9px}
+.bench-cell .val{font-size:12px;color:#e0dbd0;font-family:sans-serif;font-weight:600;margin-top:4px}
+.prog-table{width:100%;border-collapse:collapse;font-family:sans-serif;font-size:11px}
+.prog-table th{font-size:9px;letter-spacing:1.2px;padding:8px 9px;text-align:left;border-bottom:1px solid #252a35;background:#111318;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.prog-table td{padding:8px 9px;border-bottom:1px solid #1a1e25}
+.prog-table tr:nth-child(even) td{background:#111318}
+.phase-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:1.2px;font-family:sans-serif;text-transform:uppercase}
+.phase-build{background:rgba(76,175,125,0.15);color:#4caf7d}
+.phase-load{background:rgba(200,150,62,0.15);color:#c8963e}
+.phase-peak{background:rgba(207,122,106,0.15);color:#cf7a6a}
+.phase-deload{background:rgba(90,98,112,0.2);color:#8a9090}
+.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ss-box{border-radius:8px;padding:14px;border:1px solid #252a35}
+.ss-box h3{font-size:12px;color:#fff;margin-bottom:8px;font-family:sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.ss-num{font-size:28px;font-weight:700;color:#c8963e;font-family:sans-serif;line-height:1}
+.ss-sub{font-size:10px;color:#5a6270;font-family:sans-serif;margin-top:4px}
+.get-up-step{display:flex;gap:10px;padding:10px;background:#111318;border-radius:6px;margin-bottom:8px;border:1px solid #252a35}
+.step-num{min-width:28px;height:28px;border-radius:50%;background:#c8963e;color:#0c0e12;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:sans-serif;flex-shrink:0}
+.step-num.blue{background:#82aacc}
+.step-content h4{font-size:12px;color:#fff;font-family:sans-serif;font-weight:700;margin-bottom:3px}
+.step-content p{font-size:11px;color:#9a9490;font-family:sans-serif;line-height:1.5}
+.ss-log-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.standard-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:6px;margin-bottom:8px;border:1px solid #252a35}
+.standard-row.achieved{border-color:#4caf7d;background:#0e1a12}
+.armstrong-row{padding:10px 12px;background:#111318;border:1px solid #252a35;border-radius:6px;margin-bottom:8px}
+.armstrong-day{font-size:10px;font-weight:700;color:#c8963e;font-family:sans-serif;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase}
+.armstrong-sets{font-size:12px;color:#e0dbd0;font-family:sans-serif;line-height:1.6}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#c8963e;color:#0c0e12;padding:9px 18px;border-radius:5px;font-size:12px;font-weight:700;font-family:sans-serif;letter-spacing:.5px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-inner">
+    <h1>🎯 JTF2 Complete Program</h1>
+    <p>Bridge Phase → JTF2 8-Week → Simple & Sinister · Toronto Fire Captain</p>
+  </div>
+</div>
+<div class="main-tabs">
+  <div class="main-tabs-inner">
+    <button class="mtab active" onclick="switchMain('bridge')">BRIDGE</button>
+    <button class="mtab" onclick="switchMain('program')">JTF2 PROGRAM</button>
+    <button class="mtab" onclick="switchMain('ss')">SIMPLE & SINISTER</button>
+    <button class="mtab" onclick="switchMain('ironcore')">IRON CORE</button>
+    <button class="mtab" onclick="switchMain('benchmarks')">TARGETS</button>
+    <button class="mtab" onclick="switchMain('progression')">PROGRESSION</button>
+  </div>
+</div>
+<div class="content" id="main-content"></div>
+<div id="toast"></div>
+<script>
+
+// ─── STATE ───────────────────────────────────────────────
+let state = {
+  mainTab:'bridge',
+  bridgeWeek:1,
+  bridgeSubTab:'gtg',
+  progWeek:1,
+  progDay:0,
+  ssSubTab:'daily',
+  ssDay: new Date().toISOString().slice(0,10),
+};
+let db = loadDB();
+
+function loadDB(){
+  try{ return JSON.parse(localStorage.getItem('jtf2_v3')||'null')||emptyDB(); }
+  catch(e){ return emptyDB(); }
+}
+function saveDB(){ try{ localStorage.setItem('jtf2_v3',JSON.stringify(db)); }catch(e){} }
+function emptyDB(){
+  const o={ bridge:{days:{},pullups:{},getup:{}}, ss:{log:{}} };
+  for(let w=1;w<=4;w++){
+    for(let d=1;d<=7;d++) o.bridge.days[`${w}-${d}`]=false;
+    o.bridge.pullups[w]={v1:'',v2:'',v3:'',v4:'',v5:'',v6:'',v7:'',v8:''};
+    o.bridge.getup[w]={weight:'',reps:'',notes:''};
+  }
+  return o;
+}
+
+function switchMain(tab){
+  state.mainTab=tab;
+  document.querySelectorAll('.mtab').forEach((b,i)=>{
+    b.classList.toggle('active',['bridge','program','ss','ironcore','benchmarks','progression'][i]===tab);
+  });
+  render();
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.opacity=1;
+  setTimeout(()=>t.style.opacity=0,1600);
+}
+
+// ─── BRIDGE DATA ─────────────────────────────────────────
+const bridgeDays=[
+  {d:'MON',desc:'GtG pull-ups throughout the day · Turkish Get-Up practice (5 min, light or shoe)'},
+  {d:'TUE',desc:'Easy 20–25 min Zone 2 run · GtG pull-ups if on days off'},
+  {d:'WED',desc:'GtG pull-ups throughout the day · Turkish Get-Up practice'},
+  {d:'THU',desc:'Easy 20–25 min Zone 2 run · Armstrong Thursday session (Weeks 1-2: Pyramid · Week 3: Max Effort 5 sets · Week 4: Max Test) — see Armstrong tab'},
+  {d:'FRI',desc:'GtG pull-ups — record total daily reps · Turkish Get-Up practice'},
+  {d:'SAT',desc:'Easy 20–25 min run OR ruck walk 30 min no pack'},
+  {d:'SUN',desc:'Full rest — Recovery A or B from Tactical FF if post-shift'},
+];
+const bridgeNotes=[
+  'Week 1 — Establish the groove. 1 rep every time you pass the bar. Never to failure, never to fatigue. Start Get-Up with shoe on fist only.',
+  'Week 2 — Bump to 2-3 reps per pass if Week 1 felt easy. Get-Up: move to 15-20 lb DB if all 7 positions feel clean with the shoe.',
+  'Week 3 — Pull-up reps getting cleaner and easier. Get-Up: try 35 lb KB if 20 lbs felt solid. Runs to 25-30 min if the body allows.',
+  'Week 4 — Final week. Count total Friday reps — write it down. Get-Up: consolidate at whatever weight feels controlled and perfect.',
+];
+
+// Armstrong pull-up program
+const armstrong=[
+  {day:'Mon',label:'MAX EFFORT — 5 SETS',sets:'5 sets to near-failure · rest 90s between · record each set · DO NOT go to absolute failure — stop 1-2 reps short'},
+  {day:'Tue',label:'PUSH-UP PYRAMID',sets:'3 sets of push-ups to failure · 90s rest · Keeps upper body fresh for pull-up frequency without overloading pulling muscles'},
+  {day:'Wed',label:'PULL-UP PYRAMID',sets:'Set 1: 1 rep · Set 2: 2 reps · Set 3: 3 reps... continue adding 1 rep per set until you can\'t complete the next set · Then work back down'},
+  {day:'Thu',label:'REPEAT BEST DAY',sets:'Repeat whichever of Mon/Wed felt strongest that week · Same protocol'},
+  {day:'Fri',label:'MAX TEST',sets:'One all-out set to failure · This is your weekly benchmark · Write it down every Friday'},
+];
+
+// Get-Up learning progression
+const getUpSteps=[
+  {n:1,title:'Shoe on Fist — No weight',load:'No weight',desc:'Lie on your back, right knee bent, right fist pointing at the ceiling with shoe balanced on it. Do NOT drop the shoe through the entire movement. Learn every position. This is what Pavel prescribes for everyone — not just beginners.'},
+  {n:2,title:'Roll to Elbow',load:'Shoe / no weight',desc:'KEY DETAIL: as you roll to your elbow, lift your free hand off the floor immediately. If you leave it down, your body pushes with it and locks up your torso. This single detail is what most people get wrong.'},
+  {n:3,title:'Press to Hand',load:'Shoe / no weight',desc:'From elbow, press up to your palm. Arm stays locked vertical throughout — the bell (or shoe) should always be stacked directly over your shoulder, not drifting forward or back.'},
+  {n:4,title:'Hip Bridge',load:'Shoe / no weight',desc:'Drive your hips up into a full bridge — glutes squeeze hard. Create space under your body. This is where posterior chain strength from your RDLs transfers directly.'},
+  {n:5,title:'Leg Sweep',load:'Shoe / no weight',desc:'Sweep your straight leg back and under into a half-kneeling position. Keep the arm locked vertical the entire time. Look at your fist, not the floor.'},
+  {n:6,title:'Tall Kneeling to Stand',load:'Shoe / no weight',desc:'From half-kneeling, drive through the front foot to standing. The arm stays locked overhead throughout. Then reverse the entire sequence back to the floor with the same control.'},
+  {n:7,title:'Full Get-Up — Light DB',load:'15–20 lbs',desc:'Only add weight once every position from steps 1-6 is completely automatic. Start with 15-20 lb DB. The shoe taught you the pattern — now the weight teaches you where your weaknesses are.'},
+  {n:8,title:'Full Get-Up — 35 lb KB',load:'35 lb KB',desc:'Your Bridge Phase graduation weight. If you can do 5 controlled Get-Ups per side at 35 lbs with zero form breakdown, you\'re ready for S&S. The 53 lb KB is your next purchase after JTF2 Cycle 1.'},
+];
+
+// ─── JTF2 PROGRAM ────────────────────────────────────────
+const PROGRAM=[
+  {week:1,phase:'BUILD',intensity:55,summary:'Entering with Tactical FF Cycle 1 complete — weights adjusted upward. Still treat this as baseline week: learn JTF2 patterns, record everything, test pull-ups.',days:[
+    {day:'Day 1',label:'BASELINE STRENGTH TEST',theme:'Learn every movement — record weights used',duration:'50–55 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'8 min',items:['Hip 90/90 rotations × 8 each side','Thoracic rotation stretch × 6','Arm circles × 10 each direction','Goblet squat hold 20s — very light']},
+      {name:'Strength — Test Sets',type:'strength',duration:'30 min',items:['DB Romanian Deadlift — 3×8 @ 55–60 lbs each hand · rest 90s · record exact weight used — entering at Tactical FF Week 7 level','Single-Arm DB Row — 3×8 @ 55–60 lbs each · rest 60s · record weight','Goblet Squat — 3×10 @ 45–50 lbs · rest 60s · slightly lower than current to allow JTF2 deeper range','Push-Up to Rotation — 3×8 bodyweight · note how many feel clean']},
+      {name:'Pull-Up Baseline Test',type:'strength',duration:'10 min',items:['Set 1: Max strict dead-hang pull-ups — full extension to chin over bar · WRITE NUMBER DOWN','Rest 3 min','Set 2: Ring rows or inverted rows — 2×10 bodyweight','This number is your Cycle 1 start point — do not skip it']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 45s each','Child\'s pose 60s','Doorframe chest stretch 30s each']},
+    ],note:'You\'re entering JTF2 with a full Tactical FF cycle behind you — these Week 1 weights reflect that. Still treat this as a baseline week: learn the JTF2 movement patterns, record every weight, and don\'t grind. Pull-up baseline test is the most important output of this day.'},
+    {day:'Day 2',label:'FIRST RUCK',theme:'Zone 2 aerobic base — build time before weight',duration:'40 min total',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'30 min',items:['Pack weight: 15 lbs','Pace: fully conversational — you could hold a phone call','Target distance: 3–4 km in 30 min','If knees feel anything: stop, note it, come back without the pack']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'10 min',items:['Standing quad stretch 45s each','Calf stretch on step 30s each','Hip flexor lunge stretch 45s each']},
+    ],note:'30 min at 15 lbs feels like nothing. Good. Build time before weight — always.'},
+    {day:'Day 3',label:'FUNCTIONAL CIRCUIT',theme:'Rotational patterns — learn movement quality',duration:'45 min',blocks:[
+      {name:'Activation',type:'warmup',duration:'8 min',items:['Lateral band walks × 12 each','Dead bugs × 8 slow','KB halos × 8 @ 35 lbs','World\'s greatest stretch × 4 each side']},
+      {name:'AMRAP 15 min — Learn the Circuit',type:'amrap',duration:'15 min',items:['KB Woodchop — × 8 each side @ 35 lbs · focus on hip rotation','Alternating DB Snatch — × 6 each @ 25 lbs · control the descent','Lateral Lunge to Press — × 6 each side @ 25 lbs','Band Pull-Apart × 12 — medium band','Plank to Downdog × 6 — bodyweight']},
+      {name:'Grip & Pull Foundation',type:'strength',duration:'12 min',items:['Dead Hang — 3 × max hold · record seconds · rest 90s','Inverted Row or Assisted Pull-Up — 3×8','Rest 60s between sets']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Lat stretch in doorframe 45s each','Wrist flexor/extensor stretch 30s each','Neck rolls + shoulder rolls 60s']},
+    ],note:'Count your AMRAP rounds. Week 1 might be 3 rounds — that\'s fine. This number is the one to watch grow over 8 weeks.'},
+    {day:'Day 4',label:'REST / ACTIVE RECOVERY',theme:'Non-negotiable — do not train',duration:'20 min max',blocks:[
+      {name:'Active Recovery — Pick One',type:'cooldown',duration:'15–20 min',items:['Easy walk 20 min — no pack, no pace target','10 min hip and thoracic mobility flow','Foam roll: quads, IT band, lats, thoracic spine (2 min each)']},
+    ],note:'Week 1 recovery matters as much as the sessions. Sleep and food do the adaptation, not extra training.'},
+  ]},
+  {week:2,phase:'BUILD',intensity:60,summary:'Add 5 lbs where Week 1 felt comfortable. Start tracking every set.',days:[
+    {day:'Day 1',label:'STRENGTH — ADD LOAD',theme:'First real weight bump',duration:'55 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'8 min',items:['Hip 90/90 rotations × 10 each side','Thoracic rotation stretch × 8','Goblet squat hold 25s — light','Arm circles + band pull-aparts × 12']},
+      {name:'Strength — Straight Sets',type:'strength',duration:'30 min',items:['DB Romanian Deadlift — 4×8 @ 60 lbs each hand · rest 90s · hinge from hip not waist','Single-Arm DB Row — 3×8 @ 60 lbs each · rest 60s · full scapular retraction at top','Goblet Squat — 4×8 @ 50 lbs · rest 60s · break parallel if depth allows','Push-Up to Rotation — 3×10 bodyweight · 2-sec hold at top rotation']},
+      {name:'Loaded Carry',type:'carry',duration:'10 min',items:['Farmer Carry — 3×30m @ 60 lbs each hand · walk tall, ribs stacked · rest 75s']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 45s each','Child\'s pose 60s','Doorframe chest stretch 45s each']},
+    ],note:'Add where Week 1 felt comfortable. Don\'t add everywhere at once.'},
+    {day:'Day 2',label:'RUCK + MOBILITY',theme:'Extend the ruck 10 min from Week 1',duration:'50 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'40 min',items:['Pack weight: 15 lbs','Pace: conversational throughout · Zone 2','Target distance: 4–5 km in 40 min']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'10 min',items:['Standing quad stretch 45s each','Calf stretch on step 45s each','Hip flexor lunge stretch 60s each']},
+    ],note:'Same weight, 10 more minutes. The only change.'},
+    {day:'Day 3',label:'FUNCTIONAL CIRCUIT',theme:'Push AMRAP rounds — track count',duration:'50 min',blocks:[
+      {name:'Activation',type:'warmup',duration:'8 min',items:['Lateral band walks × 15 each','Dead bugs × 10','KB halos × 10 @ 35 lbs','World\'s greatest stretch × 5 each side']},
+      {name:'AMRAP 18 min — Full Circuit',type:'amrap',duration:'18 min',items:['KB Woodchop — × 10 each side @ 35 lbs','Alternating DB Snatch — × 8 each @ 25 lbs','Lateral Lunge to Press — × 8 each side @ 25 lbs','Band Pull-Apart × 12 — medium band','Plank to Downdog × 8 — bodyweight']},
+      {name:'Grip & Pull Progression',type:'strength',duration:'12 min',items:['Dead Hang — 3 × target 30–40s · rest 90s','Pull-Up — 3×5–6 · go unassisted if possible','Rest 60s between sets']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Lat stretch 45s each','Wrist stretch 30s each','Child\'s pose 60s']},
+    ],note:'Write down your AMRAP round count every week. That number is the most honest progress marker in this program.'},
+    {day:'Day 4',label:'REST / ACTIVE RECOVERY',theme:'Non-negotiable',duration:'20 min max',blocks:[
+      {name:'Active Recovery — Pick One',type:'cooldown',duration:'15–20 min',items:['Easy walk 20 min','Hip and thoracic mobility flow 10 min','Foam roll: quads, IT band, calves, lats']},
+    ],note:'No extra training.'},
+  ]},
+  {week:3,phase:'BUILD',intensity:65,summary:'Second ruck added. First easy run introduced. Pull-ups progressing toward unassisted.',days:[
+    {day:'Day 1',label:'STRENGTH — COMPOUND FOCUS',theme:'Heavier RDL and row',duration:'60 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'8 min',items:['Hip 90/90 rotations × 10 each side','Thoracic rotation stretch × 8','Goblet squat hold 30s','Arm circles + banded pull-aparts × 15']},
+      {name:'Strength — Straight Sets',type:'strength',duration:'35 min',items:['DB Romanian Deadlift — 4×8 @ 60 lbs each hand · rest 90s · slow eccentric 3 seconds down · add band when 60 lbs feels easy','Single-Arm DB Row — 4×8 @ 60 lbs each · rest 60s','Goblet Squat — 4×8 @ 50 lbs · rest 60s · pause 1s at bottom','Push-Up to Rotation — 4×10 bodyweight · 3s hold at top']},
+      {name:'Carry + Pull Superset',type:'carry',duration:'12 min',items:['Farmer Carry — 3×35m @ 60 lbs each hand · rest 75s','KB Woodchop — 2×10 each side @ 35 lbs · superset after carry']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Child\'s pose 60s','Doorframe chest stretch 45s each']},
+    ],note:'RDL is your single most important movement — it builds the posterior chain everything else depends on. Band note: when 60 lbs feels comfortable, loop a resistance band under your feet and over your hands to add accommodating resistance at the top.'},
+    {day:'Day 2',label:'RUCK SESSION 1',theme:'Week 3 introduces two ruck days',duration:'55 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'45 min',items:['Pack weight: 20 lbs · first time at this weight — note how it feels','Pace: conversational · Zone 2','Target: 4–5 km in 45 min · knee check throughout']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'10 min',items:['Standing quad stretch 45s each','Calf stretch on step 45s each','Hip flexor lunge stretch 60s each']},
+    ],note:'Knee note: if any new pain at 20 lbs, drop back to 15 lbs. Do not push through knee pain — ever.'},
+    {day:'Day 3',label:'CIRCUIT + FIRST EASY RUN',theme:'20-min Zone 2 run added this week',duration:'60 min',blocks:[
+      {name:'Easy Run FIRST',type:'carry',duration:'20 min',items:['20 min easy Zone 2 run — fully conversational, no pace target','Walk breaks are fine · keep moving · the zone matters, not the speed']},
+      {name:'Activation',type:'warmup',duration:'6 min',items:['Lateral band walks × 12 each','Dead bugs × 8','KB halos × 8 @ 35 lbs']},
+      {name:'AMRAP 18 min',type:'amrap',duration:'18 min',items:['KB Woodchop — × 10 each side @ 35 lbs','Alternating DB Snatch — × 8 each @ 25 lbs','Lateral Lunge to Press — × 8 each side @ 25 lbs','Band Pull-Apart × 15','Plank to Downdog × 8']},
+      {name:'Grip & Pull',type:'strength',duration:'10 min',items:['Dead Hang — 3 × target 35–45s · rest 90s','Pull-Up — 3×6 · go unassisted if possible this week','Rest 60s between sets']},
+      {name:'Cool Down',type:'cooldown',duration:'6 min',items:['Lat stretch 45s each','Wrist stretch 30s each','Hip flexor stretch 45s each']},
+    ],note:'Run goes first because aerobic work degrades when done post-fatigue. It will feel weird to run then lift — do it anyway.'},
+    {day:'Day 4',label:'RUCK SESSION 2',theme:'Second ruck — shorter, easier',duration:'35 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'30 min',items:['Pack weight: 20 lbs','Pace: easy · recovery ruck','Target: just cover ground comfortably · 3 km is enough']},
+      {name:'Post-Ruck Stretch',type:'cooldown',duration:'5 min',items:['Calf stretch 30s each','Hip flexor stretch 30s each']},
+    ],note:'Second ruck should feel like active recovery. If knees are talking from the first, skip and walk without a pack instead.'},
+  ]},
+  {week:4,phase:'LOAD',intensity:72,summary:'Load increases across all variables. Expect fatigue mid-week — that\'s adaptation.',days:[
+    {day:'Day 1',label:'STRENGTH — LOAD PHASE BEGINS',theme:'Volume and weight both step up',duration:'65 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'8 min',items:['Hip 90/90 rotations × 10 each side','Thoracic rotation stretch × 8','Goblet squat hold 30s','Arm circles + banded pull-aparts × 15']},
+      {name:'Strength — Straight Sets',type:'strength',duration:'38 min',items:['DB Romanian Deadlift — 5×6 @ 60 lbs each hand (+ band if available) · rest 90s','Single-Arm DB Row — 4×8 @ 60 lbs each · rest 75s','Goblet Squat — 4×8 @ 55 lbs · rest 75s','Push-Up to Rotation — 4×10 bodyweight · strict form, 3s hold at top','DB Thruster — 3×10 @ 20 lbs each · squat-to-press, no pause between']},
+      {name:'Loaded Carry',type:'carry',duration:'12 min',items:['Farmer Carry — 4×35m @ 60 lbs each hand · rest 75s','Suitcase Carry — 2×30m each side @ 60 lbs · rest 60s']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Child\'s pose 60s','Doorframe chest stretch 45s each']},
+    ],note:'Thruster is new this week — start at 20 lbs and focus on squat depth before pressing. Band reminder: add band to RDL when 60 lbs feels easy rather than waiting for heavier DBs.'},
+    {day:'Day 2',label:'RUCK + ZONE 2',theme:'55 min ruck at 20 lbs',duration:'65 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'55 min',items:['Pack weight: 20 lbs','Pace: Zone 2 — conversational but purposeful','Target distance: 5–6 km in 55 min']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'10 min',items:['Standing quad stretch 45s each','Calf stretch on step 45s each','Hip flexor lunge stretch 60s each','Thoracic extension 90s']},
+    ],note:'10 more minutes this week. Nothing else changes.'},
+    {day:'Day 3',label:'CIRCUIT + ZONE 2 RUN',theme:'AMRAP intensity picks up',duration:'65 min',blocks:[
+      {name:'Zone 2 Run',type:'carry',duration:'25 min',items:['25 min easy Zone 2 run · 5 min longer than Week 3','Conversational throughout','Note: run BEFORE the circuit, not after']},
+      {name:'Activation',type:'warmup',duration:'6 min',items:['Lateral band walks × 15 each','Dead bugs × 10','KB halos × 10 @ 35 lbs']},
+      {name:'AMRAP 20 min',type:'amrap',duration:'20 min',items:['KB Woodchop — × 10 each side @ 35 lbs','Alternating DB Snatch — × 8 each @ 25 lbs','Lateral Lunge to Press — × 8 each side @ 25 lbs','Band Pull-Apart × 15','Plank to Downdog × 8']},
+      {name:'Grip & Pull',type:'strength',duration:'10 min',items:['Dead Hang — 3 × target 40–50s · rest 90s','Pull-Up — 3×6 unassisted or heavy band · strict dead hang to chin over bar','Rest 60s']},
+      {name:'Cool Down',type:'cooldown',duration:'6 min',items:['Lat stretch 45s each','Wrist stretch 30s each','Child\'s pose 60s']},
+    ],note:'AMRAP is 20 full minutes now. Track your round count — should equal or beat Week 3.'},
+    {day:'Day 4',label:'SECOND RUCK + RECOVERY',theme:'Shorter ruck then rest',duration:'45 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'35 min',items:['Pack weight: 20 lbs','Easy pace — recovery ruck','Target: 3–4 km']},
+      {name:'Post-Ruck Stretch',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Quad stretch 45s each','Calf stretch 45s each','Child\'s pose 60s']},
+    ],note:'Keep it easy. No heroics on the second ruck day.'},
+  ]},
+  {week:5,phase:'LOAD',intensity:78,summary:'Pack weight goes to 25 lbs. Loaded carries replace passive rest.',days:[
+    {day:'Day 1',label:'STRENGTH — VOLUME PEAK',theme:'Highest set count so far',duration:'70 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'10 min',items:['Hip 90/90 rotations × 10 each side','Thoracic rotation stretch × 8','Goblet squat hold 30s','Arm circles + banded pull-aparts × 15','World\'s greatest stretch × 5 each side']},
+      {name:'Strength — Straight Sets',type:'strength',duration:'40 min',items:['DB Romanian Deadlift — 5×6 @ 60 lbs + band each hand · rest 90s · squeeze glutes hard at top','Single-Arm DB Row — 4×8 @ 60 lbs each · rest 75s','Goblet Squat — 4×8 @ 55–60 lbs · rest 75s','Push-Up to Rotation — 4×12 bodyweight · increase reps not weight','DB Thruster — 3×10 @ 20 lbs each']},
+      {name:'Loaded Carry Superset',type:'carry',duration:'15 min',items:['Farmer Carry — 4×40m @ 60 lbs each hand · rest 90s','Suitcase Carry — 3×30m each side @ 60 lbs · rest 75s','Goblet Carry — 2×30m @ 35 lb KB · front-loaded, brace hard']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Child\'s pose 60s','Doorframe chest stretch 45s each']},
+    ],note:'Band on the RDL is now standard if 60 lbs alone feels easy. You should feel meaningfully fitter than Week 1 by now.'},
+    {day:'Day 2',label:'RUCK — FIRST 25-LB SESSION',theme:'Weight steps up for the first time',duration:'70 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'60 min',items:['Pack weight: 25 lbs · first time at this weight','Pace: Zone 2 — if you can\'t hold a conversation, drop pace not distance','Target: 5–6 km in 60 min','Knee note: 25 lbs changes joint load — monitor closely first 20 min']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'10 min',items:['Standing quad stretch 60s each','Calf stretch on step 60s each','Hip flexor lunge stretch 60s each','Thoracic extension over foam roller 2 min']},
+    ],note:'25 lbs is a real step up. The first 10–15 min will feel different — give it time to settle.'},
+    {day:'Day 3',label:'CIRCUIT + ZONE 2 RUN',theme:'30-min run · AMRAP pushes harder',duration:'70 min',blocks:[
+      {name:'Zone 2 Run',type:'carry',duration:'30 min',items:['30 min Zone 2 run · first time at 30 min','Truly easy — walk breaks are fine']},
+      {name:'Activation',type:'warmup',duration:'6 min',items:['Lateral band walks × 15 each','Dead bugs × 10','KB halos × 10 @ 35 lbs']},
+      {name:'AMRAP 20 min',type:'amrap',duration:'20 min',items:['KB Woodchop — × 10 each side @ 35 lbs','Alternating DB Snatch — × 8 each @ 25 lbs','Lateral Lunge to Press — × 8 each side @ 25 lbs','Band Pull-Apart × 15','Plank to Downdog × 8']},
+      {name:'Pull-Up Progression',type:'strength',duration:'12 min',items:['Pull-Up — 4×6 unassisted · full dead hang between reps · rest 90s','Dead Hang — 2 × max hold after pull-up sets','Note: add small pack (5–10 lbs) if bodyweight 4×6 feels easy']},
+      {name:'Cool Down',type:'cooldown',duration:'6 min',items:['Lat stretch 45s each','Wrist stretch 30s each','Child\'s pose 60s']},
+    ],note:'AMRAP rounds should be climbing steadily from Week 1. If flat, check rest inside circuit — move within 10–15s at all times.'},
+    {day:'Day 4',label:'RUCK SESSION 2 + RECOVERY',theme:'Second ruck at 25 lbs — keep it easy',duration:'50 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'40 min',items:['Pack weight: 25 lbs','Easy pace — recovery ruck','Target: 4 km']},
+      {name:'Post-Ruck Stretch',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Quad stretch 45s each','Calf stretch 45s each','Child\'s pose 60s']},
+    ],note:'Two 25-lb rucks in one week for the first time. Keep the second one genuinely easy.'},
+  ]},
+  {week:6,phase:'LOAD',intensity:83,summary:'Near peak load. Full benchmark test at week\'s end.',days:[
+    {day:'Day 1',label:'STRENGTH — NEAR PEAK LOAD',theme:'Heaviest week before peak',duration:'70 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'10 min',items:['Hip 90/90 rotations × 10 each side','Thoracic rotation stretch × 8','Goblet squat hold 30s','World\'s greatest stretch × 5 each side']},
+      {name:'Strength — Straight Sets',type:'strength',duration:'38 min',items:['DB Romanian Deadlift — 5×6 @ 60 lbs + band · rest 90s · Cycle 1 peak load','Single-Arm DB Row — 4×8 @ 60 lbs each · rest 75s','Goblet Squat — 4×8 @ 60 lbs · rest 75s · 2s pause at bottom','Push-Up to Rotation — 4×12 bodyweight · strict','DB Thruster — 3×10 @ 25 lbs each · full squat depth required']},
+      {name:'Loaded Carry Finisher',type:'carry',duration:'15 min',items:['Farmer Carry — 4×40m @ 60 lbs each hand · rest 90s','Suitcase Carry — 3×30m each side @ 60 lbs · rest 75s']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Child\'s pose 60s','Doorframe chest stretch 45s each']},
+    ],note:'60 lbs + band RDL is your Cycle 1 ceiling. Cycle 2 target: 65–70 lbs + band. Cycle 3: 75–80 lbs + band.'},
+    {day:'Day 2',label:'RUCK — LONGEST YET',theme:'70 min at 25–30 lbs',duration:'80 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'70 min',items:['Pack weight: 25–30 lbs · your call based on how Week 5 felt','Pace: Zone 2 — this is a long ruck, not a test','Target: 6–7 km in 70 min']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'10 min',items:['Legs up the wall 5 min','Hip flexor lunge stretch 60s each','Calf stretch 45s each']},
+    ],note:'Pace management matters here — start slower than you think you need to.'},
+    {day:'Day 3',label:'CIRCUIT + BENCHMARK TEST',theme:'Full test at end of session',duration:'75 min',blocks:[
+      {name:'Zone 2 Run',type:'carry',duration:'30 min',items:['30 min run · slightly faster than Week 5 if natural','Note perceived exertion vs Week 5']},
+      {name:'Activation',type:'warmup',duration:'6 min',items:['Lateral band walks × 15 each','Dead bugs × 10','KB halos × 10 @ 35 lbs']},
+      {name:'AMRAP 20 min',type:'amrap',duration:'20 min',items:['KB Woodchop — × 10 each side @ 35 lbs','Alternating DB Snatch — × 8 each @ 25 lbs','Lateral Lunge to Press — × 8 each side @ 25 lbs','Band Pull-Apart × 15','Plank to Downdog × 8']},
+      {name:'END-OF-PHASE BENCHMARK TEST',type:'strength',duration:'15 min',items:['Max strict pull-ups — write it down · compare to Week 1','Max push-ups unbroken — write it down','Dead hang max — write it down','This is your Cycle 1 benchmark for the Targets tab']},
+      {name:'Cool Down',type:'cooldown',duration:'6 min',items:['Lat stretch 45s each','Child\'s pose 60s']},
+    ],note:'Write down every number from the benchmark test. In Cycle 2 these should all improve.'},
+    {day:'Day 4',label:'RUCK SESSION 2',theme:'Final second ruck of Load phase',duration:'50 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'40 min',items:['Pack weight: 25 lbs · back down from potential 30 lbs today','Easy pace — true recovery ruck','Target: 4 km']},
+      {name:'Post-Ruck Stretch',type:'cooldown',duration:'8 min',items:['Full-body stretch 45s each · hip flexors, quads, calves, lats, chest']},
+    ],note:'Week 7 is peak intensity. Use this ruck to prepare mentally.'},
+  ]},
+  {week:7,phase:'PEAK',intensity:95,summary:'Maximum intensity. Every session at personal best. Then mandatory deload in Week 8.',days:[
+    {day:'Day 1',label:'PEAK STRENGTH',theme:'Heavy compound + loaded carry',duration:'65–75 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'10 min',items:['Hip 90/90 rotations × 10 each side','Thoracic rotation stretch × 8','Goblet squat hold 30s','Arm circles + banded pull-aparts × 15']},
+      {name:'Strength — Peak Sets',type:'strength',duration:'35 min',items:['DB Romanian Deadlift — 5×6 @ 60 lbs + band each hand · rest 90s (JTF2: 80–90 lbs each)','Single-Arm DB Row — 4×8 @ 60 lbs · rest 75s (JTF2: 80 lbs)','Goblet Squat — 4×8 @ 60 lbs · rest 75s (JTF2: 80 lbs or barbell 185 lbs)','Push-Up to Rotation — 4×10 bodyweight · 3s hold at top (JTF2: weighted vest 20 lbs)']},
+      {name:'Loaded Carry Finisher',type:'carry',duration:'15 min',items:['Farmer Carry — 4×40m @ 60 lbs each hand · rest 90s (JTF2: 80 lbs each)','Suitcase Carry — 4×30m each side @ 60 lbs · rest 75s (JTF2: 80 lbs)']},
+      {name:'Cool Down',type:'cooldown',duration:'10 min',items:['Hip flexor stretch 60s each','Child\'s pose 60s','Doorframe chest stretch 45s']},
+    ],note:'Heaviest session of the cycle. Your 60 lb + band RDL is working toward an 80–90 lb Cycle 2/3 target.'},
+    {day:'Day 2',label:'RUCK + ZONE 2',theme:'60-min ruck at 25–30 lbs',duration:'75 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'60 min',items:['Pack weight: 25–30 lbs (JTF2: 77 lbs for 15 km)','Pace: brisk but fully conversational (Zone 2)','Target: 5–6 km in 60 min']},
+      {name:'Post-Ruck Mobility',type:'cooldown',duration:'15 min',items:['Standing quad stretch 45s each','Calf stretch on step 45s each','Hip flexor lunge stretch 60s each','Thoracic extension over foam roller 2 min']},
+    ],note:'Cycle 3 target: 40–45 lbs for 10 km. Build time before weight, always.'},
+    {day:'Day 3',label:'PEAK FUNCTIONAL CIRCUIT',theme:'Push every AMRAP round',duration:'55–60 min',blocks:[
+      {name:'Activation',type:'warmup',duration:'8 min',items:['Lateral band walks × 15 each','Dead bugs × 10','KB halos × 10 @ 35 lbs','World\'s greatest stretch × 5 each side']},
+      {name:'AMRAP 20 min — Push Hard',type:'amrap',duration:'20 min',items:['KB Woodchop — × 10 each side @ 35 lbs (JTF2: 53 lb KB)','Alternating DB Snatch — × 8 each @ 25 lbs (JTF2: 35–40 lbs)','Lateral Lunge to Press — × 8 each side @ 25 lbs (JTF2: 35 lbs)','Band Pull-Apart × 15','Plank to Downdog × 8']},
+      {name:'Grip & Pull Superset',type:'strength',duration:'15 min',items:['Dead Hang — 3 × 30–45s · rest 90s (JTF2: 3 × 90s)','Pull-Up — 3×8 strict dead-hang · rest 90s (JTF2: 3×12 strict)']},
+      {name:'Cool Down',type:'cooldown',duration:'10 min',items:['Lat stretch 45s each','Wrist flexor stretch 30s each','Neck rolls + shoulder CARs']},
+    ],note:'This rotational work exceeds standard military prep for real-world firefighting demands. Push AMRAP rounds hard.'},
+    {day:'Day 4',label:'REST / IRON CORE',theme:'Active recovery only',duration:'20–24 min',blocks:[
+      {name:'Active Recovery',type:'cooldown',duration:'15–20 min',items:['Easy walk 20 min — no pack','10 min mobility flow — hips, thoracic, ankles','Foam roll: quads, IT band, lats, thoracic spine']},
+      {name:'Iron Core Protocol (Optional — only if fresh)',type:'amrap',duration:'4 min',items:['See Iron Core tab for full instructions','Round 1 & 3: KB Plank Pull-Throughs @ 35 lbs · 45 sec on / 15 sec off','Round 2 & 4: Sledgehammer Kayaks · 45 sec on / 15 sec off']},
+    ],note:'Peak week taxes your CNS. Iron Core is optional — only add if genuinely fresh after the walk.'},
+    {day:'Day 5',label:'PEAK CONDITIONING',theme:'Firefighter intervals + pull-up ladder',duration:'55–60 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'8 min',items:['Jump rope or high knees 3 min','Hip CARs × 5 each','Arm swings + torso rotations 2 min']},
+      {name:'Interval Block — 5 Rounds',type:'amrap',duration:'25 min',items:['Sledgehammer slams × 15 — max power','DB Thruster — × 10 @ 25 lbs each (JTF2: 35 lbs)','Lateral shuffle × 10m each way — bodyweight','Push-up × 12 bodyweight (JTF2: 20 per round)','Rest 90s between rounds']},
+      {name:'Pull-Up Benchmark Ladder',type:'strength',duration:'15 min',items:['Set 1: Max strict pull-ups — WRITE DOWN · Week 7 target: 8–10 reps','Rest 2 min','Set 2: 75% of max reps','Rest 2 min','Set 3: 50% of max reps','(JTF2 standard: Set 1 = 15+ strict)']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Dead hang passive stretch 30s','Child\'s pose 60s','Thoracic rotation × 10 each side']},
+    ],note:'Your pull-up Set 1 number is your most trackable JTF2 metric. Write it down. From 4 to 10 over 8 weeks is realistic.'},
+    {day:'Day 6',label:'LONG RUCK',theme:'75–90 min — longest aerobic session of the cycle',duration:'90–100 min',blocks:[
+      {name:'Long Ruck',type:'carry',duration:'75–90 min',items:['Pack weight: 25–30 lbs','Duration: 75–90 min — longest ruck of the cycle','Target: 7–8 km at sustainable pace','Hydrate every 20 min']},
+      {name:'Post-Ruck Recovery',type:'cooldown',duration:'10 min',items:['Legs up the wall 10 min','Protein meal within 30 min — aim 40–50g','Log: distance, time, pack weight, how knees felt']},
+    ],note:'Pace matters less than completing the distance under load.'},
+    {day:'Day 7',label:'FULL REST',theme:'Sleep, eat, prepare for deload',duration:'0 min training',blocks:[
+      {name:'Recovery Priorities',type:'cooldown',duration:'All day',items:['Sleep: 7–8 hours minimum','Protein: 140–160g across the day','Light stretching only if desired','Review Week 7 logs: pull-up number, ruck distance, AMRAP rounds']},
+    ],note:'Week 8 is your deload. Re-test all benchmarks at end of Week 8. Then Cycle 2 with Progression tab weights.'},
+  ]},
+  {week:8,phase:'DELOAD',intensity:45,summary:'Recover, consolidate, prepare for Cycle 2 or transition to S&S.',days:[
+    {day:'Day 1',label:'DELOAD STRENGTH',theme:'50–60% of Week 7 weights',duration:'40 min',blocks:[
+      {name:'Warm-Up',type:'warmup',duration:'8 min',items:['Hip 90/90 rotations × 8 each side','Thoracic rotation stretch × 6','Goblet squat hold 20s — light','Arm circles × 10 each']},
+      {name:'Strength — Light Sets',type:'strength',duration:'25 min',items:['DB Romanian Deadlift — 3×8 @ 35–40 lbs each hand · no band · easy, focus on form · this is 50-60% of Week 7 peak','Single-Arm DB Row — 3×8 @ 35–40 lbs each · light and controlled','Goblet Squat — 3×10 @ 30–35 lbs · slow and deliberate','Push-Up to Rotation — 3×8 bodyweight · no grinding']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Hip flexor stretch 60s each','Child\'s pose 90s','Doorframe chest stretch 45s each']},
+    ],note:'This should feel almost too easy. That\'s correct. Gains from Week 7 consolidate during this deload.'},
+    {day:'Day 2',label:'EASY RUCK',theme:'40 min at 15 lbs — true recovery',duration:'50 min',blocks:[
+      {name:'Ruck Walk',type:'carry',duration:'40 min',items:['Pack weight: 15 lbs · back to Week 1 weight intentionally','Pace: easy — slower than any other ruck session','Target: just move, cover ground comfortably']},
+      {name:'Post-Ruck Stretch',type:'cooldown',duration:'8 min',items:['Full-body stretch — hold everything 60s']},
+    ],note:'Back to 15 lbs is intentional recovery. Your body needs this contrast to absorb peak week load.'},
+    {day:'Day 3',label:'EASY CIRCUIT + FINAL BENCHMARK',theme:'Light circuit then full retest',duration:'55 min',blocks:[
+      {name:'Easy Run',type:'carry',duration:'20 min',items:['20 min easy Zone 2 run · back to Week 1 duration']},
+      {name:'Light Circuit — Half Volume',type:'amrap',duration:'10 min',items:['AMRAP 10 min only · same exercises, half the rounds, easy pace','KB Woodchop × 8 each side @ 35 lbs','Alternating DB Snatch × 6 each @ 25 lbs','Lateral Lunge to Press × 6 each side @ 25 lbs','Band Pull-Apart × 12','Plank to Downdog × 6']},
+      {name:'CYCLE 1 FINAL BENCHMARK RETEST',type:'strength',duration:'15 min',items:['Max strict pull-ups — compare to Week 6 test · write number down','Max push-ups unbroken — write down','Dead hang max — write down','These numbers are your Cycle 2 starting baseline']},
+      {name:'Cool Down',type:'cooldown',duration:'8 min',items:['Lat stretch 45s each','Child\'s pose 90s']},
+    ],note:'Whatever your numbers are today — write them down. Any improvement vs Week 6 = the program worked. Now start Cycle 2 with Progression tab weights, or transition to S&S.'},
+    {day:'Day 4',label:'FULL REST — CYCLE 1 COMPLETE',theme:'End of Cycle 1',duration:'0–30 min',blocks:[
+      {name:'Recovery',type:'cooldown',duration:'All day',items:['Full rest or easy walk','Reflect on Cycle 1: pull-up progress, ruck distance, AMRAP rounds, carry weights','Decide: Cycle 2 of JTF2, or transition to S&S as your daily foundation','See the Simple & Sinister tab for the next chapter']},
+    ],note:'Cycle 1 is done. Well done. Come back to the Progression tab for Cycle 2 weights, or start S&S.'},
+  ]},
+];
+
+// ─── S&S DATA ────────────────────────────────────────────
+const ssStandards=[
+  {name:'Simple — Men',swing:'32 kg (70 lbs)',getup:'32 kg (70 lbs)',swingTime:'Under 5 min',getupTime:'Under 10 min',desc:'Your realistic 6–9 month target with a 53 lb KB purchase after JTF2 Cycle 1.'},
+  {name:'Sinister — Men',swing:'48 kg (106 lbs)',getup:'48 kg (106 lbs)',swingTime:'Under 5 min',getupTime:'Under 10 min',desc:'World-class. Years of work. Not the current goal — just know where the ceiling is.'},
+  {name:'Your Entry Point',swing:'35–53 lbs',getup:'35 lbs (learning) → 53 lbs',swingTime:'No time target yet',getupTime:'No time target yet',desc:'Start swings at 35 lb KB. Buy 53 lb KB after JTF2 Cycle 1. Get-Up: shoe → 20 lbs → 35 lbs during Bridge Phase.'},
+];
+
+const ssProgression=[
+  {phase:'Bridge Phase (now)',swing:'35 lb KB — 10 sets × 10 two-hand swings · learn the hip snap',getup:'Shoe on fist → 15–20 lb DB · learn all 7 positions',pair:'GtG pull-ups · Easy runs'},
+  {phase:'After JTF2 Cycle 1',swing:'53 lb KB — 10 sets × 10 one-hand swings · switch hands each set',getup:'35–53 lb KB · 5 each side · alternating',pair:'3×/week easy run or ruck · GtG pull-ups daily'},
+  {phase:'Simple Standard Goal',swing:'32 kg (70 lb) KB — 100 swings in under 5 min',getup:'32 kg (70 lb) KB — 10 Get-Ups in under 10 min',pair:'Run 3×/week · Ruck 1×/week · GtG pull-ups'},
+];
+
+// ─── BENCHMARKS ──────────────────────────────────────────
+const benchmarks=[
+  {cat:'Running',jtf2:'5 km sub-20 min',target:'5 km sub-26 min',start:'Timed 5 km — Week 1',notes:'Zone 2 base first, speed comes after. Sub-24 possible by Cycle 3.'},
+  {cat:'Pull-Ups',jtf2:'15+ strict unbroken',target:'8–12 strict unbroken',start:'Max test — JTF2 Week 1 Day 1',notes:'Bridge phase GtG + Armstrong builds this before Week 1. Adding 1 clean rep per week is realistic.'},
+  {cat:'Push-Ups',jtf2:'70+ unbroken',target:'40–55 unbroken',start:'Max test — JTF2 Week 1 Day 1',notes:'Rotational push-ups and interval sets directly build this. 40–55 at 44 is excellent.'},
+  {cat:'Ruck',jtf2:'15 km / 77 lbs / 3.5 hrs',target:'10 km / 40–45 lbs / comfortable pace',start:'30 min / 15 lbs — Week 1',notes:'Build time before weight, always.'},
+  {cat:'Dead Hang (Grip)',jtf2:'90+ seconds',target:'45–60 seconds',start:'Max hang — JTF2 Week 1',notes:'Farmer carries and grip superset build this directly.'},
+  {cat:'Lower Body Strength',jtf2:'Barbell squat 225 lbs',target:'DB goblet squat 60–70 lbs / DB RDL 60 lbs + band',start:'Current: 60 lbs entering',notes:'Band adds accommodating resistance when DB ceiling is reached.'},
+  {cat:'S&S Simple Standard',jtf2:'48 kg Sinister',target:'32 kg Simple — 100 swings + 10 Get-Ups',start:'Bridge Phase — shoe on fist',notes:'6–9 months after starting S&S with a 53 lb KB.'},
+];
+
+// ─── PROGRESSION ─────────────────────────────────────────
+const progression=[
+  {exercise:'DB Romanian Deadlift',c1:'60 lbs + band',c2:'65–70 lbs + band',c3:'75–80 lbs + band',jtf2:'80–90 lbs'},
+  {exercise:'Goblet Squat',c1:'60 lbs',c2:'65–70 lbs',c3:'75 lbs',jtf2:'80+ lbs'},
+  {exercise:'Single-Arm DB Row',c1:'60 lbs',c2:'65–70 lbs',c3:'70–75 lbs',jtf2:'80 lbs'},
+  {exercise:'Farmer Carry',c1:'60 lbs each',c2:'65–70 lbs each',c3:'75 lbs each',jtf2:'80+ lbs each'},
+  {exercise:'DB Thruster',c1:'25 lbs each',c2:'30 lbs each',c3:'35 lbs each',jtf2:'40 lbs each'},
+  {exercise:'KB Woodchop',c1:'35 lbs',c2:'35–40 lbs',c3:'44–53 lbs (KB step-up)',jtf2:'53 lb KB'},
+  {exercise:'Pull-Ups (reps)',c1:'8–10 strict',c2:'10–12 strict',c3:'12–15 strict',jtf2:'15+ strict'},
+  {exercise:'Ruck (weight)',c1:'25–30 lbs / 7–8 km',c2:'35 lbs / 8–10 km',c3:'40–45 lbs / 10 km',jtf2:'77 lbs / 15 km'},
+  {exercise:'Dead Hang',c1:'45–60s',c2:'60–75s',c3:'75–90s',jtf2:'90s+'},
+  {exercise:'KB Swing (S&S)',c1:'35 lb · 2-hand',c2:'53 lb · 1-hand',c3:'70 lb · 1-hand',jtf2:'106 lb · 1-hand (Sinister)'},
+  {exercise:'Turkish Get-Up',c1:'35 lb KB (Bridge Phase)',c2:'53 lb KB',c3:'70 lb KB (Simple Standard)',jtf2:'106 lb KB (Sinister)'},
+];
+
+// ─── RENDER ───────────────────────────────────────────────
+function render(){
+  const c=document.getElementById('main-content');
+  if(state.mainTab==='bridge') c.innerHTML=renderBridge();
+  else if(state.mainTab==='program') c.innerHTML=renderProgram();
+  else if(state.mainTab==='ss') c.innerHTML=renderSS();
+  else if(state.mainTab==='ironcore') c.innerHTML=renderIronCore();
+  else if(state.mainTab==='benchmarks') c.innerHTML=renderBenchmarks();
+  else if(state.mainTab==='progression') c.innerHTML=renderProgression();
+}
+
+function renderBridge(){
+  const w=state.bridgeWeek;
+  const pu=db.bridge.pullups[w];
+  const gu=db.bridge.getup[w];
+  let totalDays=0,doneDays=0;
+  for(let wk=1;wk<=4;wk++) for(let d=1;d<=7;d++){totalDays++;if(db.bridge.days[`${wk}-${d}`])doneDays++;}
+  const pct=Math.round(doneDays/totalDays*100);
+  const daily=[1,2,3,4,5,6,7,8].reduce((s,i)=>(s+(parseInt(pu['v'+i])||0)),0);
+  const targets=[30,40,50,60];
+  const dpct=Math.min(100,Math.round(daily/targets[w-1]*100));
+  const subTabs=['gtg','armstrong','getup'];
+  const subLabels=['GtG PULL-UPS','ARMSTRONG PLAN','TURKISH GET-UP'];
+
+  return `
+    <div class="card-accent">
+      <div class="label label-amber" style="margin-bottom:6px">PHASE 1 — 4-WEEK BRIDGE</div>
+      <h2>Grease the Groove + Get-Up Learning</h2>
+      <p class="body" style="margin-top:6px">Before JTF2 Week 1: build pull-up capacity, aerobic base, and learn the Turkish Get-Up. Keep Recovery A/B from Tactical FF after shifts.</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;color:#e0dbd0;font-family:sans-serif">${doneDays} / ${totalDays} days logged</span>
+        <span style="font-size:13px;color:#c8963e;font-weight:700;font-family:sans-serif">${pct}%</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+    </div>
+    <div class="week-selector">
+      ${[1,2,3,4].map(wk=>`<button class="wbtn ${wk===w?'active':''}" onclick="setBW(${wk})">WEEK ${wk}</button>`).join('')}
+    </div>
+    <div class="card-accent" style="margin-bottom:12px"><p class="small">${bridgeNotes[w-1]}</p></div>
+    <div class="day-tabs">
+      ${subTabs.map((t,i)=>`<button class="dtab ${state.bridgeSubTab===t?'active':''}" onclick="setBST('${t}')">${subLabels[i]}</button>`).join('')}
+    </div>
+    ${state.bridgeSubTab==='gtg'?renderGtG(w,pu,daily,targets,dpct):''}
+    ${state.bridgeSubTab==='armstrong'?renderArmstrong():''}
+    ${state.bridgeSubTab==='getup'?renderGetUpPractice(w,gu):''}
+    <div class="label label-amber" style="margin-top:14px;margin-bottom:8px">DAILY CHECKLIST — WEEK ${w}</div>
+    ${bridgeDays.map((day,i)=>{const key=`${w}-${i+1}`;const done=db.bridge.days[key];return`<div class="day-row"><span class="day-label">${day.d}</span><span class="day-desc">${day.desc}</span><button class="day-check ${done?'done':''}" onclick="toggleDay('${key}')">${done?'✓':''}</button></div>`}).join('')}
+    <div class="card-green" style="margin-top:12px">
+      <div class="label label-green" style="margin-bottom:6px">AFTER WEEK 4</div>
+      <p class="small">When Friday pull-up total feels effortless, runs feel comfortable, and Get-Up positions feel automatic — switch to the JTF2 Program tab and start Week 1.</p>
+    </div>`;
+}
+
+function renderGtG(w,pu,daily,targets,dpct){
+  return `
+    <div class="card-blue" style="margin-bottom:12px">
+      <div class="label label-blue" style="margin-bottom:8px">WHAT IS GREASE THE GROOVE? — PAVEL TSATSOULINE</div>
+      <p class="small" style="margin-bottom:8px">Coined by Pavel Tsatsouline (former Soviet Special Forces instructor, founder of StrongFirst), Grease the Groove is built on one idea: <strong style="color:#e0dbd0">strength is a skill, not just a product of muscle size.</strong> Skills improve through repetition, not exhaustion.</p>
+      <p class="small" style="margin-bottom:8px">Instead of doing hard fatiguing sets in a single workout, you spread sub-maximal reps across the entire day. Your nervous system builds new neural pathways — better wiring — without ever breaking down muscle tissue. This is called <strong style="color:#82aacc">neurological adaptation.</strong></p>
+      <p class="small" style="margin-bottom:8px">Pavel's father-in-law example: every time he went to the basement, he did 5 chin-ups. Random timing, never to failure. He averaged 25–100 reps per day. When he tested himself weeks later, he hit 20 consecutive reps — something he hadn't done even as a young Marine.</p>
+      <p class="small">The critical rule: <strong style="color:#c8963e">never go to failure. Ever.</strong> If your max is 10 pull-ups, train with 5. If a set slows down or form breaks — stop. Every rep must look identical. Failure trains the nervous system to fail. Success trains it to succeed.</p>
+    </div>
+    <div class="pavel-note"><p>"Muscle failure is more than unnecessary — it is counterproductive. If your body fails to perform your brain's command, the groove will get rusty." — Pavel Tsatsouline</p></div>
+
+    <div class="label label-amber" style="margin-top:14px;margin-bottom:8px">EVERY BAR VISIT — DO THIS IN ORDER</div>
+    <div class="card" style="margin-bottom:12px">
+      ${[
+        {n:'1',color:'#c8963e',title:'Attempt one full pull-up',desc:'Every single time you approach the bar — attempt one honest full pull-up first. Dead hang start, chin over bar. If it happens, great. If not, no problem. The nervous system needs to practice the actual movement pattern even before it can complete it. This is the attempt that eventually turns into the first rep.'},
+        {n:'2',color:'#82aacc',title:'Drop into your current progression level',desc:'Whatever stage you\'re at below — do 1–3 reps of that movement and walk away. Never to failure, never to fatigue. Random timing throughout the day is fine and actually preferred.'},
+        {n:'3',color:'#4caf7d',title:'Walk away',desc:'That\'s it. No more. The whole session at the bar is under 30 seconds. You\'ll come back again later.'},
+      ].map(s=>`
+        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:${s.color};color:#0c0e12;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:sans-serif;flex-shrink:0">${s.n}</div>
+          <div><div style="font-size:12px;font-weight:700;color:#fff;font-family:sans-serif;margin-bottom:3px">${s.title}</div><p class="small">${s.desc}</p></div>
+        </div>`).join('')}
+    </div>
+
+    <div class="label label-amber" style="margin-bottom:8px">PULL-UP PROGRESSION LADDER — WHERE ARE YOU?</div>
+    ${[
+      {stage:'Stage 1',title:'Dead Hang',load:'Bodyweight',desc:'Just hang. Full dead hang, arms completely straight, as long as you can hold. This builds the grip, shoulder stability, and lat activation that pull-ups require. Do this every bar visit in place of the pull-up attempt until it feels solid.'},
+      {stage:'Stage 2',title:'Scapular Pull-Ups',load:'Bodyweight',desc:'Dead hang, then WITHOUT bending your elbows, squeeze your shoulder blades down and together — your body rises slightly. Release. Repeat. This teaches your lats to fire before your arms take over. Most people who can\'t do pull-ups are missing this firing pattern.'},
+      {stage:'Stage 3',title:'Negative Pull-Ups',load:'Bodyweight — eccentric only',desc:'Jump or step up so your chin is over the bar. Then lower yourself as slowly as possible — aim for 5–10 seconds down. Step down, reset, repeat. Negatives build pull-up strength faster than almost anything else because your muscles are stronger in the lowering phase than the lifting phase.'},
+      {stage:'Stage 4',title:'Band-Assisted Pull-Ups',load:'Light or medium band',desc:'Loop a resistance band over the bar, put your knee or foot in it. The band takes some of your bodyweight on the way up. As you get stronger, use a lighter band. Do 1–3 reps per bar visit, never to failure.'},
+      {stage:'Stage 5',title:'First Full Pull-Up',load:'Bodyweight',desc:'Usually happens within 4–8 weeks of consistent negatives and band work. When it happens — log it. Then go back to 1–2 reps per visit and build the groove from there.'},
+    ].map(s=>`
+      <div class="get-up-step" style="margin-bottom:8px">
+        <div class="step-num" style="font-size:9px;letter-spacing:.5px">${s.stage.replace('Stage ','')}</div>
+        <div class="step-content">
+          <h4>${s.title} <span style="color:#c8963e;font-size:10px;font-family:sans-serif;font-weight:400;margin-left:6px">${s.load}</span></h4>
+          <p>${s.desc}</p>
+        </div>
+      </div>`).join('')}
+
+    <div class="label label-amber" style="margin-top:14px;margin-bottom:8px">PULL-UP LOG — WEEK ${w}</div>
+    <div class="card">
+      <p class="small" style="margin-bottom:12px">Target <strong style="color:#c8963e">5–8 bar visits per day</strong> — Pavel's actual prescription. Not 3 scheduled sets. Every time you walk past the bar at home or the station, stop and do your reps. Random timing is better than scheduled — it keeps the nervous system guessing. Log each visit below. Count full pull-ups, negatives, band-assisted, or scapular reps — all count.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        ${[1,2,3,4,5,6,7,8].map(i=>`
+          <div class="inp-wrap">
+            <label>Visit ${i} reps</label>
+            <input class="inp" type="number" min="0" value="${(pu['v'+i]||'')}" onchange="updatePU(${w},'v${i}',this.value)" placeholder="0">
+          </div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:4px">
+        <span style="font-size:10px;color:#5a6270;font-family:sans-serif;letter-spacing:1px">DAILY TOTAL vs WEEK ${w} TARGET</span>
+        <span style="font-size:10px;color:#c8963e;font-family:sans-serif">${daily} / ${targets[w-1]} reps</span>
+      </div>
+      <div style="font-size:13px;color:#c8963e;font-family:sans-serif;font-weight:700;margin-bottom:6px">Today: ${daily} reps</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:${dpct}%"></div></div>
+    </div>`;
+}
+
+function renderArmstrong(){
+  return `
+    <div class="card-blue" style="margin-bottom:12px">
+      <div class="label label-blue" style="margin-bottom:8px">ARMSTRONG — THURSDAY ONLY</div>
+      <p class="small" style="margin-bottom:8px">You do NOT run the full Mon–Fri Armstrong week. You use <strong style="color:#e0dbd0">Thursday as your one dedicated pull-up session</strong> and pick the protocol for where you are in the Bridge Phase. GtG continues every day in the background — Armstrong is your Thursday structure on top of it.</p>
+      <p class="small">Developed by Major Charles Lewis Armstrong, USMC — a structured protocol that combined with GtG frequency is why military candidates see 5-to-15 pull-up jumps in 4–6 weeks.</p>
+    </div>
+    <div class="label label-amber" style="margin-bottom:8px">WHAT TO DO EACH THURSDAY</div>
+    ${[
+      {week:'Weeks 1–2',label:'PYRAMID',sets:'Start at 1 rep · add 1 rep per set · work up until you can\'t complete the next set · then work back down · Example: 1, 2, 3, 4, 5, 4, 3, 2, 1 · Never to failure — stop when a set feels like it might fail · Can\'t do full pull-ups yet? Run the pyramid with negatives or band-assisted instead — same structure, same rules',why:'Builds volume safely without grinding. Perfect for early Bridge Phase when the groove is just forming.'},
+      {week:'Week 3',label:'MAX EFFORT — 5 SETS',sets:'5 sets near failure · stop 1–2 reps short of your max each set · rest 90s between sets · record every set · Example: if max is 8, do 6 reps per set',why:'Shifts from volume building to strength. Your neural groove from GtG is established — now you push the capacity ceiling.'},
+      {week:'Week 4',label:'MAX TEST',sets:'One all-out set to complete failure · warm up with 2–3 easy reps first · then give everything · write the number down · this is your JTF2 Week 1 pull-up entry baseline',why:'Final week benchmark. This number goes into JTF2 Week 1 Day 1 as your recorded baseline. Compare it to whatever you managed in Week 1 of Bridge Phase.'},
+    ].map(p=>`
+      <div class="armstrong-row" style="margin-bottom:10px">
+        <div class="armstrong-day">${p.week} — ${p.label}</div>
+        <div class="armstrong-sets" style="margin-bottom:6px">${p.sets}</div>
+        <div style="font-size:11px;color:#5a6270;font-family:sans-serif;line-height:1.5;font-style:italic">${p.why}</div>
+      </div>`).join('')}
+    <div class="card-green" style="margin-top:4px">
+      <div class="label label-green" style="margin-bottom:6px">HOW GtG AND ARMSTRONG WORK TOGETHER</div>
+      <p class="small">GtG (every day, sub-maximal, spread through the day) builds the neural pathway — better wiring. Armstrong Thursday (one structured session, near-maximal) builds the strength capacity on top of that wiring. They don't compete because GtG never fatigues you — 1–3 reps per pass leaves nothing in your system by the time Thursday arrives.</p>
+    </div>`;
+}
+
+function renderGetUpPractice(w,gu){
+  return `
+    <div class="card" style="margin-bottom:12px">
+      <div class="label label-amber" style="margin-bottom:8px">TURKISH GET-UP — LEARNING PROGRESSION</div>
+      <p class="small">The Turkish Get-Up is one of the most complete movements in existence — it simultaneously builds shoulder stability, hip mobility, thoracic rotation, and full-body coordination. Pavel prescribes starting with a shoe on your fist for everyone, not just beginners. The shoe teaches the pattern; the weight teaches you where your weaknesses are.</p>
+    </div>
+    ${getUpSteps.map(s=>`
+      <div class="get-up-step">
+        <div class="step-num ${s.n<=6?'':'blue'}">${s.n}</div>
+        <div class="step-content">
+          <h4>${s.title} <span style="color:#c8963e;font-size:10px;font-family:sans-serif;font-weight:400;margin-left:6px">${s.load}</span></h4>
+          <p>${s.desc}</p>
+        </div>
+      </div>`).join('')}
+    <div class="label label-amber" style="margin-top:14px;margin-bottom:8px">WEEK ${w} GET-UP LOG</div>
+    <div class="card">
+      <div class="pu-row" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="inp-wrap"><label>Weight used</label><input class="inp green" type="text" value="${gu.weight}" onchange="updateGU(${w},'weight',this.value)" placeholder="Shoe / 20 lbs"></div>
+        <div class="inp-wrap"><label>Reps each side</label><input class="inp green" type="number" min="0" value="${gu.reps}" onchange="updateGU(${w},'reps',this.value)" placeholder="0"></div>
+        <div class="inp-wrap"><label>Notes</label><input class="inp" type="text" value="${gu.notes}" onchange="updateGU(${w},'notes',this.value)" placeholder="What felt off?"></div>
+      </div>
+    </div>
+    <div class="captain-note"><p><strong style="color:#c8963e">Next purchase: </strong>Buy a 53 lb KB after completing JTF2 Cycle 1. The 35 lb KB works for Bridge Phase Get-Up learning and stays useful for swings in the early S&S phase. The 53 lb is your S&S working weight.</p></div>`;
+}
+
+function renderProgram(){
+  const wk=PROGRAM[state.progWeek-1];
+  const day=wk.days[state.progDay];
+  const phaseMap={BUILD:'phase-build',LOAD:'phase-load',PEAK:'phase-peak',DELOAD:'phase-deload'};
+  const blockLabel={warmup:'WARM-UP',strength:'STRENGTH',amrap:'AMRAP / CIRCUIT',carry:'CARRY / RUCK',cooldown:'RECOVERY',skill:'SKILL WORK'};
+  return `
+    <div class="card-accent" style="margin-bottom:12px">
+      <div class="label label-amber" style="margin-bottom:4px">PHASE 2 — 8-WEEK JTF2 PROGRAM</div>
+      <p class="small">Start only after completing the 4-week Bridge Phase. Select week then day — every session has full sets, reps, and loads.</p>
+    </div>
+    <div class="label label-muted" style="margin-bottom:8px">SELECT WEEK</div>
+    <div class="week-selector">
+      ${PROGRAM.map((w,i)=>`<button class="wbtn ${i+1===state.progWeek?'active':''}" onclick="setPW(${i+1})"><span class="phase-badge ${phaseMap[w.phase]}">${w.phase}</span> W${w.week}</button>`).join('')}
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="label label-muted" style="margin-bottom:4px">WEEK ${wk.week} — ${wk.phase}</div>
+      <p class="small">${wk.summary}</p>
+    </div>
+    <div class="day-tabs">
+      ${wk.days.map((d,i)=>`<button class="dtab ${i===state.progDay?'active':''}" onclick="setPD(${i})">${d.day}</button>`).join('')}
+    </div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="label label-amber">${day.label}</div>
+      <h2 style="margin-top:4px">${day.theme}</h2>
+      <span style="font-size:11px;color:#5a6270;font-family:sans-serif">⏱ ${day.duration}</span>
+    </div>
+    ${day.blocks.map(block=>`
+      <div class="block block-${block.type}">
+        <div class="block-header">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="block-type bt-${block.type}">${blockLabel[block.type]||'BLOCK'}</span>
+            <span style="font-size:13px;font-weight:700;color:#fff">${block.name}</span>
+          </div>
+          ${block.duration?`<span style="font-size:11px;color:#5a6270;font-family:sans-serif">⏱ ${block.duration}</span>`:''}
+        </div>
+        <ul>${block.items.map(item=>`<li>${item}</li>`).join('')}</ul>
+      </div>`).join('')}
+    <div class="captain-note"><p><strong style="color:#c8963e">Captain's Note: </strong>${day.note}</p></div>`;
+}
+
+function renderSS(){
+  const subTabs=['daily','learn','pair','standards'];
+  const subLabels=['DAILY SESSION','GET-UP STEPS','WHAT TO PAIR','STANDARDS'];
+  const today=state.ssDay;
+  const log=db.ss.log[today]||{swingWeight:'',swingTime:'',getupWeight:'',getupTime:'',notes:''};
+
+  return `
+    <div class="card-accent">
+      <div class="label label-amber" style="margin-bottom:6px">PHASE 3 — SIMPLE & SINISTER</div>
+      <h2>Pavel Tsatsouline's S&S Program</h2>
+      <p class="body" style="margin-top:6px">The best long-term maintenance and longevity program for an operational career. Two movements. Near-daily practice. Endlessly scalable with one kettlebell. Start this after JTF2 Cycle 1 with a 53 lb KB.</p>
+    </div>
+    <div class="ss-grid">
+      <div class="ss-box" style="background:#1a1608;border-color:#c8963e">
+        <h3 style="color:#c8963e">SWINGS</h3>
+        <div class="ss-num">100</div>
+        <div class="ss-sub">10 sets × 10 one-hand swings</div>
+        <div class="ss-sub" style="margin-top:4px">Switch hands each set · rest as needed</div>
+        <div class="ss-sub" style="margin-top:4px;color:#c8963e">Goal: complete in under 5 min</div>
+      </div>
+      <div class="ss-box" style="background:#0e1a12;border-color:#3a7a50">
+        <h3 style="color:#4caf7d">TURKISH GET-UP</h3>
+        <div class="ss-num" style="color:#4caf7d">10</div>
+        <div class="ss-sub">5 each side · alternating · one at a time</div>
+        <div class="ss-sub" style="margin-top:4px">Rest between each rep · never rush</div>
+        <div class="ss-sub" style="margin-top:4px;color:#4caf7d">Goal: complete in under 10 min</div>
+      </div>
+    </div>
+    <div class="day-tabs">
+      ${subTabs.map((t,i)=>`<button class="dtab ${state.ssSubTab===t?'active':''}" onclick="setSSST('${t}')">${subLabels[i]}</button>`).join('')}
+    </div>
+    ${state.ssSubTab==='daily'?renderSSDaily(today,log):''}
+    ${state.ssSubTab==='learn'?renderSSLearn():''}
+    ${state.ssSubTab==='pair'?renderSSPair():''}
+    ${state.ssSubTab==='standards'?renderSSStandards():''}`;
+}
+
+function renderSSDaily(today,log){
+  return `
+    <div class="card">
+      <div class="label label-muted" style="margin-bottom:8px">SESSION LOG</div>
+      <div class="inp-wrap" style="margin-bottom:10px">
+        <label>Date</label>
+        <input class="inp" type="date" value="${today}" onchange="state.ssDay=this.value;render()">
+      </div>
+      <div class="ss-log-grid">
+        <div class="inp-wrap"><label>Swing weight</label><input class="inp" type="text" value="${log.swingWeight}" onchange="updateSSLog('swingWeight',this.value)" placeholder="35 lbs"></div>
+        <div class="inp-wrap"><label>Swing time</label><input class="inp" type="text" value="${log.swingTime}" onchange="updateSSLog('swingTime',this.value)" placeholder="8:30"></div>
+        <div class="inp-wrap"><label>Notes</label><input class="inp" type="text" value="${log.notes}" onchange="updateSSLog('notes',this.value)" placeholder="How it felt"></div>
+        <div class="inp-wrap"><label>Get-Up weight</label><input class="inp green" type="text" value="${log.getupWeight}" onchange="updateSSLog('getupWeight',this.value)" placeholder="35 lbs"></div>
+        <div class="inp-wrap"><label>Get-Up time</label><input class="inp green" type="text" value="${log.getupTime}" onchange="updateSSLog('getupTime',this.value)" placeholder="12:00"></div>
+      </div>
+    </div>
+    <div class="card-blue">
+      <div class="label label-blue" style="margin-bottom:8px">HOW TO RUN THE SESSION</div>
+      <ul style="padding-left:14px">
+        ${['Warm up 5 min — hip hinges, halos, arm bars','Swings: 10 sets of 10 one-hand swings · switch hands each set · rest as needed · record total time','Rest 5 min','Turkish Get-Ups: 10 total (5 each side) · alternate sides · one at a time · rest between each · record total time','Cool down: hip flexor stretch 60s each, child\'s pose 60s, wrist stretch 30s each'].map(i=>`<li style="font-size:12px;color:#c0bab0;font-family:sans-serif;margin-bottom:6px;line-height:1.6">${i}</li>`).join('')}
+      </ul>
+    </div>
+    <div class="captain-note"><p><strong style="color:#c8963e">The progression rule: </strong>Only increase weight when you can complete all 100 swings in under 5 min AND all 10 Get-Ups in under 10 min at your current weight, with perfect form on every rep. Chasing time before quality is how shoulders get hurt.</p></div>`;
+}
+
+function renderSSLearn(){
+  return `
+    <div class="card" style="margin-bottom:12px">
+      <p class="small">The 7-position Turkish Get-Up taught step by step. Master each position before moving to the next weight. Practice during Bridge Phase so you arrive at S&S with the pattern automatic.</p>
+    </div>
+    ${getUpSteps.map(s=>`
+      <div class="get-up-step">
+        <div class="step-num ${s.n<=6?'':'blue'}">${s.n}</div>
+        <div class="step-content">
+          <h4>${s.title} <span style="color:#c8963e;font-size:10px;font-family:sans-serif;font-weight:400;margin-left:6px">${s.load}</span></h4>
+          <p>${s.desc}</p>
+        </div>
+      </div>`).join('')}`;
+}
+
+function renderSSPair(){
+  return `
+    <div class="card-green" style="margin-bottom:12px">
+      <div class="label label-green" style="margin-bottom:8px">BEST PAIRINGS WITH S&S</div>
+      <p class="small">S&S is designed as a foundation, not the whole house. Pavel is clear on this — S&S builds the engine, you choose what you drive.</p>
+    </div>
+    ${[
+      ['✅ Rucking — IDEAL','S&S builds posterior chain and grip. Rucking builds aerobic base. They don\'t compete at all — different energy systems, different demands. Ruck 2–3x/week at your current progression weight. This is arguably the best possible combination for a firefighter long-term.','card-green'],
+      ['✅ GtG Pull-Ups — IDEAL','S&S has zero upper body pulling. GtG pull-ups fill that gap without adding recovery debt. 1-3 reps every time you pass the bar, daily, forever. This is your permanent pulling practice.','card-green'],
+      ['✅ Easy Zone 2 Running','Pairs well. S&S doesn\'t drain the aerobic system, so running 3x/week alongside it is fine. Marathon training pairs naturally with S&S for the same reason — both build the engine without competing.','card-green'],
+      ['⚠️ Heavy lifting programs','Too much CNS overlap with the Get-Up. If you run JTF2 and S&S simultaneously, reduce JTF2 strength volume significantly. Better to run them sequentially — JTF2 builds the peak, S&S maintains it.','card'],
+      ['❌ High-volume metcons or CrossFit','Directly competes with S&S recovery. The whole point of S&S is sustainable daily practice — stacking metabolic conditioning on top defeats the recovery architecture.','card-red'],
+    ].map(([title,desc,cardClass])=>`
+      <div class="${cardClass}" style="margin-bottom:10px">
+        <h3 style="font-size:12px;margin-bottom:6px">${title}</h3>
+        <p class="small">${desc}</p>
+      </div>`).join('')}
+    <div class="card-accent" style="margin-top:4px">
+      <div class="label label-amber" style="margin-bottom:6px">YOUR LONG-TERM DAILY STRUCTURE AFTER JTF2</div>
+      ${[['Daily','S&S — swings + Get-Ups · ~30 min'],['Daily','GtG pull-ups — 1-3 reps per pass, spread through the day'],['3×/week','Easy run OR ruck at current progression weight'],['Occasional','Iron Core 4-min finisher after S&S if fresh']].map(([freq,act])=>`
+        <div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start">
+          <span style="min-width:70px;font-size:10px;color:#c8963e;font-weight:700;font-family:sans-serif;letter-spacing:.5px">${freq}</span>
+          <span style="font-size:12px;color:#c0bab0;font-family:sans-serif">${act}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderSSStandards(){
+  return `
+    <div class="card" style="margin-bottom:12px">
+      <p class="body">S&S has two standards. Both use the same protocol — 100 swings + 10 Get-Ups. The only variable is weight and time. Your entry point is far below Simple Standard — that\'s correct and expected.</p>
+    </div>
+    ${ssStandards.map(s=>`
+      <div class="card" style="margin-bottom:10px">
+        <h3>${s.name}</h3>
+        <div class="bench-grid">
+          <div class="bench-cell" style="background:#1a1608"><div class="label label-amber">SWING WEIGHT</div><div class="val">${s.swing}</div></div>
+          <div class="bench-cell" style="background:#1a1608"><div class="label label-amber">GET-UP WEIGHT</div><div class="val">${s.getup}</div></div>
+          <div class="bench-cell" style="background:#161920"><div class="label label-muted">TIME GOALS</div><div class="val" style="font-size:10px">${s.swingTime}<br>${s.getupTime}</div></div>
+        </div>
+        <p class="small" style="padding-top:8px;border-top:1px solid #252a35">${s.desc}</p>
+      </div>`).join('')}
+    <div class="label label-amber" style="margin-bottom:8px;margin-top:4px">YOUR PROGRESSION ROADMAP</div>
+    ${ssProgression.map((p,i)=>`
+      <div class="standard-row">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#fff;font-family:sans-serif;margin-bottom:3px">${p.phase}</div>
+          <div style="font-size:11px;color:#9a9490;font-family:sans-serif">Swing: ${p.swing}</div>
+          <div style="font-size:11px;color:#9a9490;font-family:sans-serif">Get-Up: ${p.getup}</div>
+          <div style="font-size:11px;color:#c8963e;font-family:sans-serif;margin-top:3px">Pair with: ${p.pair}</div>
+        </div>
+        <div style="font-size:20px;color:#252a35">${i===0?'→':i===1?'→':'⭐'}</div>
+      </div>`).join('')}`;
+}
+
+function renderIronCore(){
+  return `
+    <div class="card-accent" style="margin-bottom:14px">
+      <div class="label label-amber" style="margin-bottom:6px">IRON CORE PROTOCOL</div>
+      <h2>4-Minute Core Finisher</h2>
+      <p class="body" style="margin-top:6px">Use on Day 4 (rest/active recovery) when genuinely fresh, or after S&S if feeling good. 4 rounds of 45 sec work / 15 sec rest, alternating floor and standing.</p>
+    </div>
+    ${[
+      {n:1,side:'FLOOR',color:'#82aacc',bg:'ic-floor',time:'0:00 to 0:45',name:'KB Plank Pull-Throughs',desc:'Rigid push-up plank, feet wide. Place 35 lb KB just behind your left wrist. Reach under with your right hand, drag the bell across to the right side. Switch hands, drag back. Slow is hard — 3–4 seconds per drag, hips must not tilt or rotate.',cue:'WHY: Anti-rotation forces the entire abdominal wall into massive isometric tension to keep hips square.'},
+      {n:2,side:'STANDING',color:'#c8963e',bg:'ic-standing',time:'1:00 to 1:45',name:'Sledgehammer Kayaks',desc:'Feet hip-width, grip sledgehammer like a kayak paddle with one hand at the very bottom tip. Aggressively carve a tight figure-8 — slice hammer head down past left hip, then up and down past right hip.',cue:'CUE: Freeze your lower body. Hips do not swing. Obliques do 100% of the braking and twisting.'},
+      {n:3,side:'FLOOR',color:'#82aacc',bg:'ic-floor',time:'2:00 to 2:45',name:'KB Plank Pull-Throughs',desc:'Same as Round 1. If it feels easy you\'re going too fast — slow the drag to 4 seconds per side. Elevate feet on a step to increase load if needed.',cue:''},
+      {n:4,side:'STANDING',color:'#c8963e',bg:'ic-standing',time:'3:00 to 3:45',name:'Sledgehammer Kayaks',desc:'Final round — obliques should be clearly fatigued. Maintain form over speed. Alternate lead hand from Round 2.',cue:''},
+    ].map(r=>`
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-radius:6px;margin-bottom:8px;background:#151520">
+        <div style="min-width:32px;height:32px;border-radius:50%;background:${r.color}33;color:${r.color};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:sans-serif;flex-shrink:0">${r.n}</div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:${r.color};font-family:sans-serif;margin-bottom:3px;letter-spacing:1px">ROUND ${r.n} — ${r.time} · ${r.side}</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">${r.name}</div>
+          <p class="small">${r.desc}</p>
+          ${r.cue?`<div style="margin-top:6px;font-size:10px;color:${r.color};font-family:sans-serif;letter-spacing:1px">${r.cue}</div>`:''}
+        </div>
+      </div>
+      ${r.n<4?'<div style="text-align:center;padding:4px;font-size:10px;color:#5a6270;font-family:sans-serif;letter-spacing:1.5px">— REST 15 SEC —</div>':''}`).join('')}
+    <div class="card" style="margin-top:10px">
+      <div class="label label-amber" style="margin-bottom:8px">IF IT\'S TOO EASY</div>
+      <p class="small">Slow the pull-through drag to 4 seconds per side and freeze completely between reps. Elevate feet on a step for the plank rounds. Don\'t add rounds — add tension. The goal is maximal isometric tension, not reps.</p>
+    </div>`;
+}
+
+function renderBenchmarks(){
+  return `
+    <div class="card" style="margin-bottom:14px"><p class="body">JTF2 candidates are 25–32. You\'re 44, on shift rotation, managing knees. These <strong style="color:#c8963e">realistic targets</strong> represent genuine elite fitness for your profile.</p></div>
+    ${benchmarks.map(b=>`
+      <div class="card" style="margin-bottom:10px">
+        <h3>${b.cat}</h3>
+        <div class="bench-grid">
+          <div class="bench-cell" style="background:#2d1e1e"><div class="label label-red">JTF2 / S&S STANDARD</div><div class="val">${b.jtf2}</div></div>
+          <div class="bench-cell" style="background:#0e1a12"><div class="label label-green">YOUR TARGET</div><div class="val">${b.target}</div></div>
+          <div class="bench-cell" style="background:#161920"><div class="label label-amber">START TEST</div><div class="val">${b.start}</div></div>
+        </div>
+        <p class="small" style="padding-top:8px;border-top:1px solid #252a35">${b.notes}</p>
+      </div>`).join('')}`;
+}
+
+function renderProgression(){
+  return `
+    <div class="card-accent" style="margin-bottom:14px">
+      <div class="label label-amber" style="margin-bottom:6px">3-CYCLE JTF2 PROGRESSION + S&S</div>
+      <p class="body">JTF2 movements stay the same across 3 cycles — only the weights change. After Cycle 3, transition to S&S as your daily foundation. S&S progression is separate and runs indefinitely.</p>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="prog-table">
+      <thead><tr>
+        <th style="color:#7a8090">EXERCISE</th>
+        <th style="color:#c8963e">CYCLE 1</th>
+        <th style="color:#4caf7d">CYCLE 2</th>
+        <th style="color:#4caf7d">CYCLE 3</th>
+        <th style="color:#cf7a6a">JTF2 / S&S GOAL</th>
+      </tr></thead>
+      <tbody>${progression.map(r=>`<tr><td style="color:#fff;font-weight:600">${r.exercise}</td><td style="color:#c8963e">${r.c1}</td><td style="color:#4caf7d">${r.c2}</td><td style="color:#4caf7d">${r.c3}</td><td style="color:#cf7a6a">${r.jtf2}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <div class="card" style="margin-top:14px">
+      <div class="label label-amber" style="margin-bottom:8px">BAND PROGRESSION NOTE</div>
+      <p class="small">When any DB exercise hits the 60 lb ceiling and feels comfortable, add a resistance band before buying heavier DBs. Bands add accommodating resistance — lighter at the bottom where you\'re weakest, heavier at the top where the movement is strongest. You\'re already doing this on RDL. Apply the same principle to: DB Row (band under foot), Goblet Squat (band through KB handle), Farmer Carry pick-up (band under feet at start).</p>
+    </div>`;
+}
+
+// ─── HANDLERS ─────────────────────────────────────────────
+function setBW(w){state.bridgeWeek=w;render();}
+function setBST(t){state.bridgeSubTab=t;render();}
+function setPW(w){state.progWeek=w;state.progDay=0;render();}
+function setPD(d){state.progDay=d;render();}
+function setSSST(t){state.ssSubTab=t;render();}
+function toggleDay(key){db.bridge.days[key]=!db.bridge.days[key];saveDB();toast(db.bridge.days[key]?'Day logged ✓':'Day unmarked');render();}
+function updatePU(week,field,val){db.bridge.pullups[week][field]=val;saveDB();render();}
+function updateGU(week,field,val){db.bridge.getup[week][field]=val;saveDB();toast('Saved');}
+function updateSSLog(field,val){
+  const today=state.ssDay;
+  if(!db.ss.log[today]) db.ss.log[today]={swingWeight:'',swingTime:'',getupWeight:'',getupTime:'',notes:''};
+  db.ss.log[today][field]=val;
+  saveDB();toast('Saved');
+}
+
+render();
+</script>
+</body>
+</html>
